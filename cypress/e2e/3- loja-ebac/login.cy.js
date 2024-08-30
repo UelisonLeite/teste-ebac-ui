@@ -49,7 +49,7 @@ it('Deve fazer login com sucesso - usando massa de dados', () => {
     
 });
 
-it.only('Deve fazer login com sucesso - usando fixture', () => {
+it('Deve fazer login com sucesso - usando fixture', () => {
 
     cy.fixture('perfil').then(dados => {
 
@@ -62,6 +62,11 @@ it.only('Deve fazer login com sucesso - usando fixture', () => {
 
     })
     
+});
+it.only('Deve fazer logincom sucesso usando comandos customizados', () => {
+  cy.login('uelison.teste@teste.com.br', 'teste@123')
+ // cy.get('.woocommerce-MyAccount-content > :nth-child(2)').should('contain', 'Olá, uelisonteste (não é uelisonteste? Sair)')
+  
 });
     
 }) 
