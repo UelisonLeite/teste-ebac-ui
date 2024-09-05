@@ -1,22 +1,58 @@
 ///<reference types= "cypress"/>
 
+import produtosPage from "../../support/page-objects/produtos.page";
+
 describe('Funcionalidade: produto', () => {
  
     beforeEach(() => {
-        cy.visit('produtos')
+        produtosPage.visitarUrl()
     });
 
 
     it('Deve selecionar um produto da lista', () => {
-        cy.get('.products > .row')
-        //.first()
-        //.click()
-        //.eq(2)
-        .contains('Abominable Hoodie')
-        .click()
+       
+        produtosPage.buscarProdutoLista('Abominable Hoodie')
 
         cy.get('#tab-title-description > a').should('contain', 'Descrição')
 
         
     });
+
+    it('Deve buscar um produto com sucesso', () => {
+
+        let produto = 'Augusta Pullover Jacket'
+        produtosPage.buscarProduto(produto)
+        cy.get('.product_title').should('contain', produto)
+        
+    });
+
+    it('Deve visitar a página do produto', () => {
+        produtosPage.visitarProduto("Augusta-Pullover-Jacket")
+
+        
+    });
+
+    it('Deve adiocionar produto ao carrinho', () => {
+        let qtd = 7
+       produtosPage.buscarProduto("Abominable Hoodie")
+       produtosPage.addProdutoCarrinho('XS', 'Blue', qtd)
+
+       cy.get('.woocommerce-message').should('contain', qtd + ' × “Abominable Hoodie” foram adicionados no seu carrinho.')
+        
+    });
+
+    
+    it.only('Deve adiocionar produto ao carrinho buscando da massa de dados', () => {
+        cy.fixture('produtos').then(dados => {
+
+            produtosPage.buscarProduto(dados[1].nomeproduto)
+            produtosPage.addProdutoCarrinho(
+                dados[1].tamanho, 
+                dados[1].cor,
+                dados[1].quantidade)
+     
+            cy.get('.woocommerce-message').should('contain', dados[1].nomeproduto)
+            })    
+    })
 });
+
